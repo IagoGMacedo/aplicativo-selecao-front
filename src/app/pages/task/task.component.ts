@@ -64,6 +64,8 @@ export class TaskComponent implements OnInit {
     this.getAllTasks();
   }
 
+  
+
   onSubmit() {
     if (this.taskForm.valid) {
       if (this.taskId) {
@@ -86,6 +88,18 @@ export class TaskComponent implements OnInit {
     } else {
       this.taskForm.markAllAsTouched();
     }
+  }
+
+  onLoadTaskForm(item: ITask) {
+    this.taskId = item.id!!;
+    this.taskForm.patchValue({
+      titulo: item.titulo,
+      descricao: item.descricao,
+      deadLine: item.deadLine,
+      prioridade: item.prioridade,
+      usuario: item.usuario
+    });
+    this.openSlidePanel();
   }
 
 

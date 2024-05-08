@@ -9,7 +9,7 @@
     </div>
     <div class="mt-3 bg-white shadow">
       @for (item of tasks; track $index) {
-      <app-task-card [status]="item.situacao" [task]="item"></app-task-card>
+      <app-task-card [status]="item.situacao" [task]="item" (click)="onLoadTaskForm(item)"></app-task-card>
       }
     </div>
   </div>

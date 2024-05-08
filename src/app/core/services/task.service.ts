@@ -22,7 +22,7 @@ export class TaskService {
   }
 
   updateTask(id: number, data: ITask): Observable<ITask> {
-    return this.http.patch<ITask>(`${apiEndpoint.TaskEndpoint.addTask}`, data);
+    return this.http.patch<ITask>(`${apiEndpoint.TaskEndpoint.addTask}/${id}`, data);
   }
   
   //outros endpoints vem aqui
