@@ -4,6 +4,8 @@ import { ITask, situacoes, prioridades } from '../../core/models/task.model';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SlidePanelComponent } from '../../shared/ui/slide-panel/slide-panel.component';
 import { TaskService } from '../../core/services/task.service';
+import { IUserValue } from '../../core/models/user.model';
+import { UserService } from '../../core/services/usuario.service';
 
 @Component({
   selector: 'app-task',
@@ -14,58 +16,66 @@ import { TaskService } from '../../core/services/task.service';
 })
 export class TaskComponent implements OnInit {
   taskForm!: FormGroup;
+  filterForm!: FormGroup;
   tasks: ITask[] = [];
+  usersValue: IUserValue[] = [];
   tarefaPrioridades = prioridades;
   tarefaSituacoes = situacoes;
   taskResponsables = ["1", "2", "3"];
-  isSlidePanelOpen = false;
   taskId: number | null = null;
   filterByStatus = '';
 
 
 
-  constructor(private taskService: TaskService, private fb: FormBuilder) {
+  constructor(private taskService: TaskService, private userService: UserService, private fb: FormBuilder) {
     this.taskForm = this.fb.group({
       titulo: new FormControl('', [Validators.required]),
       descricao: new FormControl('', [Validators.required]),
       deadLine: new FormControl('', [Validators.required]),
       prioridade: new FormControl('', [Validators.required]),
+      situacao: new FormControl('', [Validators.required]),
       usuario: new FormControl('', [Validators.required]),
+    });
+
+    this.filterForm = this.fb.group({
+      titulo: new FormControl(),
+      deadLine: new FormControl(),
+      prioridade: new FormControl(),
+      situacao: new FormControl(),
+      usuario: new FormControl(),
     });
   }
 
   ngOnInit(): void {
     this.getAllTasks();
+    this.getAllUserValues();
+  }
+
+  getAllUserValues() {
+    this.userService.getAllUserValue().subscribe({
+      next: (response) => {
+        this.usersValue = response;
+      }
+    })
+    this.usersValue.push({id: 0, nome: ''});
+    console.log("debugando");
+    console.log(this.usersValue);
   }
 
   getAllTasks() {
-    this.taskService.getAllTasks().subscribe({
+    this.taskService.getAllTasks(this.filterForm.value).subscribe({
       next: (response) => {
-        console.log("cheguei pra armazenar");
         this.tasks = response;
-        console.log("sai do armazenar");
       }
-
     })
-    console.log("debugando tarefas");
-    console.log(this.tasks);
   }
 
-  openSlidePanel() {
-    this.isSlidePanelOpen = true;
-  }
 
-  onCloseSlidePanel() {
-    this.isSlidePanelOpen = false;
-    this.closeModel();
-  }
-
-  onFilterByStatus(status: string) {
-    this.filterByStatus = status;
+  onsubmitFilter() {
     this.getAllTasks();
+    this.closeModel('filterModal');
   }
 
-  
 
   onSubmit() {
     if (this.taskForm.valid) {
@@ -75,19 +85,33 @@ export class TaskComponent implements OnInit {
           .subscribe({
             next: (response) => {
               this.getAllTasks();
-              this.onCloseSlidePanel();
+              this.closeModel('taskModal');
             },
           });
       } else {
         this.taskService.addTask(this.taskForm.value).subscribe({
           next: (response) => {
             this.getAllTasks();
-            this.onCloseSlidePanel();
+            this.closeModel('taskModal');
           },
         });
       }
     } else {
       this.taskForm.markAllAsTouched();
+    }
+    this.taskForm.reset();
+  }
+
+  onDelete() {
+    if (this.taskId) {
+      this.taskService
+        .deleteTask(this.taskId)
+        .subscribe({
+          next: (response) => {
+            this.getAllTasks();
+            this.closeModel('taskModal');
+          },
+        });
     }
   }
 
@@ -98,22 +122,37 @@ export class TaskComponent implements OnInit {
       descricao: item.descricao,
       deadLine: item.deadLine,
       prioridade: item.prioridade,
+      situacao: item.situacao,
       usuario: item.usuario
     });
-    this.openModel();
+    this.openModel('taskModal');
   }
 
-  openModel(){
-    const modelDiv = document.getElementById('exampleModal');
-    if(modelDiv != null){
+  onLoadFilterForm(item: ITask) {
+    this.taskForm.patchValue({
+      titulo: item.titulo,
+      deadLine: item.deadLine,
+      prioridade: item.prioridade,
+      situacao: item.situacao,
+      usuario: item.usuario
+    });
+    this.openModel('filterModal');
+  }
+
+  openModel(id: string) {
+    const modelDiv = document.getElementById(id);
+    if (modelDiv != null) {
       modelDiv.style.display = 'block';
     }
   }
 
-  closeModel(){
-    const modelDiv = document.getElementById('exampleModal');
-    if(modelDiv != null){
+  closeModel(id: string) {
+    const modelDiv = document.getElementById(id);
+    if (modelDiv != null) {
       modelDiv.style.display = 'none';
+      this.taskId = null;
+      if (id == 'taskModal')
+        this.taskForm.reset();
     }
   }
 

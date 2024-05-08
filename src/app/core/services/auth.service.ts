@@ -27,13 +27,6 @@ export class AuthService {
   }
 
   onLogout() {
-    /* 
-    this.http.post(`${apiEndpoint.AuthEndpoint.logout}`, '').subscribe({
-      next: (response) => {
-        this.tokenService.removeToken();
-      },
-    });
-    */
     this.tokenService.removeToken();
   }
 }

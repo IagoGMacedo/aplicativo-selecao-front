@@ -13,8 +13,10 @@ export const apiEndpoint = {
         logout: `${rootUrl}/logout`
     },
     TaskEndpoint: {
-        getAllTasks: `${apiUrl}/tarefas`,
-        addTask: `${apiUrl}/tarefas`,
+        tasks: `${apiUrl}/tarefas`,
+    },
+    UserEndpoint:{
+        userValue: `${apiUrl}/usuarios/usuarioValor`,
     }
 
 };  
