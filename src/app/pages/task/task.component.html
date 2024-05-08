@@ -3,7 +3,7 @@
   <div class="d-flex flex-column mx-5">
     <div class="d-flex justify-content-between align-items-center">
       <h3 class="font-weight-bold ">Gerenciar tarefas</h3>
-      <button class="btn btn-primary rounded-pill" (click)="openSlidePanel()">
+      <button class="btn btn-primary rounded-pill" (click)="openModel()">
         + Adicionar
       </button>
     </div>
@@ -14,66 +14,80 @@
     </div>
   </div>
 
-  <app-slide-panel [headerText]="'Adicionar tarefa'" [isOpen]="isSlidePanelOpen" (onClose)="onCloseSlidePanel()">
-    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" autocomplete="off" novalidate>
-      <div class="form-group mb-3">
-        <label for="titulo" class="form-label">Título</label>
-        <input type="text" id="titulo" class="form-control"
-          [class]="{'invalid': taskForm.get('titulo')?.hasError('required') && taskForm.get('titulo')?.touched, 'valid':taskForm.get('titulo')?.valid}"
-          placeholder="Título" formControlName="titulo">
-        @if (taskForm.get('titulo')?.hasError('required') && taskForm.get('titulo')?.touched) {
-        <span class="form-error">Insira o título.</span>
-        }
+  <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" (click)="closeModel()" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" autocomplete="off" novalidate>
+            <div class="form-group mb-3">
+              <label for="titulo" class="form-label">Título</label>
+              <input type="text" id="titulo" class="form-control"
+                [class]="{'invalid': taskForm.get('titulo')?.hasError('required') && taskForm.get('titulo')?.touched, 'valid':taskForm.get('titulo')?.valid}"
+                placeholder="Título" formControlName="titulo">
+              @if (taskForm.get('titulo')?.hasError('required') && taskForm.get('titulo')?.touched) {
+              <span class="form-error">Insira o título.</span>
+              }
+            </div>
+            <div class="form-group mb-3">
+              <label for="descricao" class="form-label">Descrição</label>
+      
+              <textarea name="" rows="10" class="form-control"
+                [class]="{'invalid': taskForm.get('descricao')?.hasError('required') && taskForm.get('descricao')?.touched, 'valid':taskForm.get('descricao')?.valid}"
+                placeholder="Descrição" formControlName="descricao"></textarea>
+              @if (taskForm.get('descricao')?.hasError('required') && taskForm.get('descricao')?.touched) {
+              <span class="form-error">Insira a descrição.</span>
+              }
+            </div>
+            <div class="form-group mb-3">
+              <label for="deadline" class="form-label">Deadline</label>
+              <input type="text" id="deadline" class="form-control"
+                [class]="{'invalid': taskForm.get('deadLine')?.hasError('required') && taskForm.get('deadLine')?.touched, 'valid':taskForm.get('deadLine')?.valid}"
+                placeholder="deadline" formControlName="deadLine">
+              @if (taskForm.get('deadLine')?.hasError('required') && taskForm.get('deadLine')?.touched) {
+              <span class="form-error">Insira o prazo</span>
+              }
+            </div>
+            <div class="form-group mb-3">
+              <label for="prioridade" class="form-label">Prioridade</label>
+              <select class="form-select"
+                [class]="{'invalid': taskForm.get('prioridade')?.hasError('required') && taskForm.get('prioridade')?.touched, 'valid':taskForm.get('prioridade')?.valid}"
+                formControlName="prioridade">
+                @for (item of tarefaPrioridades; track $index) {
+                <option [value]="item">{{item}}</option>
+                }
+              </select>
+              @if (taskForm.get('prioridade')?.hasError('required') && taskForm.get('prioridade')?.touched) {
+              <span class="form-error">Insira a prioridade</span>
+              }
+            </div>
+            <div class="form-group mb-3">
+              <label for="responsavel" class="form-label">Responsável</label>
+              <select class="form-select"
+                [class]="{'invalid': taskForm.get('usuario')?.hasError('required') && taskForm.get('usuario')?.touched, 'valid':taskForm.get('usuario')?.valid}"
+                formControlName="usuario">
+                @for (item of taskResponsables; track $index) {
+                <option [value]="item">{{item}}</option>
+                }
+              </select>
+              @if (taskForm.get('usuario')?.hasError('required') && taskForm.get('usuario')?.touched) {
+              <span class="form-error">Insira o responsável</span>
+              }
+            </div>
+            <div class="flex gap-2">
+              <button type="submit" class="btn btn-success">Adicionar</button>
+              <button type="button" class="btn btn-secondary" (click)="onCloseSlidePanel()">Cancelar</button>
+            </div>
+          </form>
+        </div>
       </div>
-      <div class="form-group mb-3">
-        <label for="descricao" class="form-label">Descrição</label>
+    </div>
+  </div>
 
-        <textarea name="" rows="10" class="form-control"
-          [class]="{'invalid': taskForm.get('descricao')?.hasError('required') && taskForm.get('descricao')?.touched, 'valid':taskForm.get('descricao')?.valid}"
-          placeholder="Descrição" formControlName="descricao"></textarea>
-        @if (taskForm.get('descricao')?.hasError('required') && taskForm.get('descricao')?.touched) {
-        <span class="form-error">Insira a descrição.</span>
-        }
-      </div>
-      <div class="form-group mb-3">
-        <label for="deadline" class="form-label">Deadline</label>
-        <input type="text" id="deadline" class="form-control"
-          [class]="{'invalid': taskForm.get('deadLine')?.hasError('required') && taskForm.get('deadLine')?.touched, 'valid':taskForm.get('deadLine')?.valid}"
-          placeholder="deadline" formControlName="deadLine">
-        @if (taskForm.get('deadLine')?.hasError('required') && taskForm.get('deadLine')?.touched) {
-        <span class="form-error">Insira o prazo</span>
-        }
-      </div>
-      <div class="form-group mb-3">
-        <label for="prioridade" class="form-label">Prioridade</label>
-        <select class="form-select"
-          [class]="{'invalid': taskForm.get('prioridade')?.hasError('required') && taskForm.get('prioridade')?.touched, 'valid':taskForm.get('prioridade')?.valid}"
-          formControlName="prioridade">
-          @for (item of tarefaPrioridades; track $index) {
-          <option [value]="item">{{item}}</option>
-          }
-        </select>
-        @if (taskForm.get('prioridade')?.hasError('required') && taskForm.get('prioridade')?.touched) {
-        <span class="form-error">Insira a prioridade</span>
-        }
-      </div>
-      <div class="form-group mb-3">
-        <label for="responsavel" class="form-label">Responsável</label>
-        <select class="form-select"
-          [class]="{'invalid': taskForm.get('usuario')?.hasError('required') && taskForm.get('usuario')?.touched, 'valid':taskForm.get('usuario')?.valid}"
-          formControlName="usuario">
-          @for (item of taskResponsables; track $index) {
-          <option [value]="item">{{item}}</option>
-          }
-        </select>
-        @if (taskForm.get('usuario')?.hasError('required') && taskForm.get('usuario')?.touched) {
-        <span class="form-error">Insira o responsável</span>
-        }
-      </div>
-      <div class="flex gap-2">
-        <button type="submit" class="btn btn-success">Adicionar</button>
-        <button type="button" class="btn btn-secondary" (click)="onCloseSlidePanel()">Cancelar</button>
-      </div>
-    </form>
-  </app-slide-panel>
+  
 </div>

@@ -57,6 +57,7 @@ export class TaskComponent implements OnInit {
 
   onCloseSlidePanel() {
     this.isSlidePanelOpen = false;
+    this.closeModel();
   }
 
   onFilterByStatus(status: string) {
@@ -99,8 +100,21 @@ export class TaskComponent implements OnInit {
       prioridade: item.prioridade,
       usuario: item.usuario
     });
-    this.openSlidePanel();
+    this.openModel();
   }
 
+  openModel(){
+    const modelDiv = document.getElementById('exampleModal');
+    if(modelDiv != null){
+      modelDiv.style.display = 'block';
+    }
+  }
+
+  closeModel(){
+    const modelDiv = document.getElementById('exampleModal');
+    if(modelDiv != null){
+      modelDiv.style.display = 'none';
+    }
+  }
 
 }
