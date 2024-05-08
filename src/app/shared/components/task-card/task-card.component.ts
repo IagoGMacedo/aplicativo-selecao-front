@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Task, TaskStatus } from '../../../core/models/task.model';
+import { ITask, situacoes } from '../../../core/models/task.model';
 
 @Component({
   selector: 'app-task-card',
@@ -9,6 +9,6 @@ import { Task, TaskStatus } from '../../../core/models/task.model';
   styleUrl: './task-card.component.scss'
 })
 export class TaskCardComponent {
-  @Input() status: TaskStatus = TaskStatus.andamento;
-  @Input() task!: Task;
+  @Input() status: string = situacoes[0];
+  @Input() task!: ITask;
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,15 +12,24 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 export class LoginComponent {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, ){
+  constructor(private fb: FormBuilder, private authService : AuthService){
     this.loginForm = this.fb.group({
       login: new FormControl('',Validators.required),
-      password: new FormControl('',Validators.required),
+      senha: new FormControl('',Validators.required),
 
     })
+    console.log("construiu");
   }
 
   onSubmit(){
-    
+    console.log("entrou no onSubmit()");
+    if(this.loginForm.valid){
+      this.authService.onLogin(this.loginForm.value).subscribe({
+        next: () => {},
+
+      })
+    } else{
+      this.loginForm.markAllAsTouched();
+    }
   }
 }

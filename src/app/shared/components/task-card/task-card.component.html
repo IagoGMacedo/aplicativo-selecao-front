@@ -1,9 +1,22 @@
-<div class="d-flex justify-content-between gap-10 py-5 px-6 cursor-pointer hover:bg-gray-100 position-relative border-bottom border-gray-200">
-    <div class="border-left border-4 pl-4 border-primary">
-        <h4 class="font-weight-bold">{{task.title}}</h4>
-        <p class="text-muted h-75 overflow-hidden">{{task.description}}</p>
+<div
+    class="d-flex justify-content-between gap-10 py-5 px-6 cursor-pointer hover:bg-gray-100 position-relative border-bottom border-gray-200">
+    <div class="border-left border-4 pl-4 " [class]="{'border-danger': task.prioridade === 'ALTA','border-warning': task.prioridade === 'MEDIA',
+        'border-info': task.prioridade === 'BAIXA',
+    }">
+        <h4 class="font-weight-bold">{{task.titulo}}</h4>
+        <p class="text-muted h-75 overflow-hidden">{{task.descricao}}</p>
     </div>
     <div>
-        <div class="bg-gray-100 border border-gray-500 text-muted  font-medium m-4 rounded p-1">aberto</div>
+        @if (status === 'ANDAMENTO') {
+        <button class="btn-primary text-white m-4 p-1  disabled">
+            Em andamento
+        </button>
+        }
+
+        @if (status === 'CONCLUIDA') {
+        <button class="btn-success text-white m-4 p-1  disabled">
+            Concluída
+        </button>
+        }
     </div>
 </div>

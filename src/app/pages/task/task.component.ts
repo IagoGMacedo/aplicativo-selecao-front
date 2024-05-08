@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskCardComponent } from '../../shared/components/task-card/task-card.component';
-import { Task, TaskStatus } from '../../core/models/task.model';
+import { ITask, situacoes, prioridades } from '../../core/models/task.model';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SlidePanelComponent } from '../../shared/ui/slide-panel/slide-panel.component';
 import { TaskService } from '../../core/services/task.service';
@@ -14,24 +14,23 @@ import { TaskService } from '../../core/services/task.service';
 })
 export class TaskComponent implements OnInit {
   taskForm!: FormGroup;
-  tasks: Task[] = [];
-  taskStatus = ["EM ANDAMENTO", "CONCLUÍDA"];
-  taskPriorities = ["BAIXO","MÉDIA", "ALTA"];
-  taskResponsables = ["IAGO", "GABRIEL", "NOBRE"];
+  tasks: ITask[] = [];
+  tarefaPrioridades = prioridades;
+  tarefaSituacoes = situacoes;
+  taskResponsables = ["1", "2", "3"];
   isSlidePanelOpen = false;
   taskId: number | null = null;
   filterByStatus = '';
 
 
 
-  constructor(private taskService: TaskService, private fb: FormBuilder){
+  constructor(private taskService: TaskService, private fb: FormBuilder) {
     this.taskForm = this.fb.group({
-      title: new FormControl('', [Validators.required]),
-      description: new FormControl('', [Validators.required]),
-      status: new FormControl('OPEN', [Validators.required]),
-      deadline: new FormControl('OPEN', [Validators.required]),
-      priority: new FormControl('OPEN', [Validators.required]),
-      responsable: new FormControl('OPEN', [Validators.required]),
+      titulo: new FormControl('', [Validators.required]),
+      descricao: new FormControl('', [Validators.required]),
+      deadLine: new FormControl('', [Validators.required]),
+      prioridade: new FormControl('', [Validators.required]),
+      usuario: new FormControl('', [Validators.required]),
     });
   }
 
@@ -39,8 +38,17 @@ export class TaskComponent implements OnInit {
     this.getAllTasks();
   }
 
-  getAllTasks(){
-    this.tasks = this.taskService.getAllTasks();
+  getAllTasks() {
+    this.taskService.getAllTasks().subscribe({
+      next: (response) => {
+        console.log("cheguei pra armazenar");
+        this.tasks = response;
+        console.log("sai do armazenar");
+      }
+
+    })
+    console.log("debugando tarefas");
+    console.log(this.tasks);
   }
 
   openSlidePanel() {
@@ -57,7 +65,6 @@ export class TaskComponent implements OnInit {
   }
 
   onSubmit() {
-    /* 
     if (this.taskForm.valid) {
       if (this.taskId) {
         this.taskService
@@ -79,8 +86,7 @@ export class TaskComponent implements OnInit {
     } else {
       this.taskForm.markAllAsTouched();
     }
-    */
   }
 
-  
+
 }

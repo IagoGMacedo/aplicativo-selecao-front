@@ -1,10 +1,31 @@
 <header class="app-header">
-    <div class="container flex items-center justify-between">
-        <h4 class="font-bold text-xl">EsigTasker</h4>
-        <div>
-            <div class="px-2 font-medium cursor-pointer">
-                
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-0">
+        <div class="container">
+            <a href="" class="navbar-brand">
+                EsigTasker
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+                <span class="navbar-toggler-icon">
+                </span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navmenu">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a href="#learn" class="nav-link">Quadro de tarefas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#questions" class="nav-link">Questions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#instructors" class="nav-link">Instructors</a>
+                    </li>
+                </ul>
+                <span>
+                    <a class="navbar-text" (click)="onLogout()">Sair</a>
+                </span>
             </div>
         </div>
-    </div>
+    </nav>
 </header>

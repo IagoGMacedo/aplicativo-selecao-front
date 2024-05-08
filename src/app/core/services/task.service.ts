@@ -1,34 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Task, TaskPriority, TaskStatus } from '../models/task.model';
+import { IResponse, ITask } from '../models/task.model';
+import { HttpClient } from '@angular/common/http';
+import { apiEndpoint } from '../constants/constants';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
-  tasks: Task[] = [{
-    id: 1, deadline: '07/05/2024', title: "codar projeto da bolsa",
-    description: "codar bem direitinho", status: TaskStatus.andamento, responsable: 'Iago Macedo',
-    priority: TaskPriority.alta
-  },
-  {
-    id: 2, deadline: '03/05/2024', title: "codar projeto da facul",
-    description: "codar bem direitinho", status: TaskStatus.andamento, responsable: 'Iago Macedo',
-    priority: TaskPriority.media
-  },
-  {
-    id: 3, deadline: '08/05/2024', title: "codar projeto do trab",
-    description: "codar bem direitinho", status: TaskStatus.andamento, responsable: 'Iago Macedo',
-    priority: TaskPriority.baixa
+  
+
+  constructor(private http: HttpClient) { }
+
+  getAllTasks(): Observable<ITask[]> {
+    return this.http.get<ITask[]>(`${apiEndpoint.TaskEndpoint.getAllTasks}`);
   }
 
-
-
-  ]
-
-  constructor() { }
-
-  getAllTasks() {
-    return this.tasks;
+  addTask(data: ITask): Observable<ITask> {
+    return this.http.post<ITask>(`${apiEndpoint.TaskEndpoint.addTask}`, data);
   }
+
+  updateTask(id: number, data: ITask): Observable<ITask> {
+    return this.http.patch<ITask>(`${apiEndpoint.TaskEndpoint.addTask}`, data);
+  }
+  
+  //outros endpoints vem aqui
+
+  //updateUsuario
+
+  
 }
