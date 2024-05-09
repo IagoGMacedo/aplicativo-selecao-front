@@ -1,10 +1,11 @@
-<div
-    class="d-flex justify-content-between gap-10 py-5 px-6 cursor-pointer hover:bg-gray-100 position-relative border-bottom border-gray-200">
-    <div class="border-left border-4 pl-4 " [class]="{'border-danger': task.prioridade === 'ALTA','border-warning': task.prioridade === 'MEDIA',
-        'border-info': task.prioridade === 'BAIXA',
-    }">
+<div class="d-flex justify-content-between border px-6 m-1" [class]="{'border-danger': task.prioridade === 'ALTA','border-warning': task.prioridade === 'MEDIA',
+'border-info': task.prioridade === 'BAIXA',
+}">
+    <div class=" pl-4 ">
+        <p class="text-muted">#{{task.id}}</p>
         <h4 class="font-weight-bold">{{task.titulo}}</h4>
-        <p class="text-muted h-75 overflow-hidden">{{task.descricao}}</p>
+        <p class="text-muted ">{{task.descricao}}</p>
+        <p class="text-muted ">{{task.nome_usuario}}</p>
     </div>
     <div>
         @if (status === 'ANDAMENTO') {

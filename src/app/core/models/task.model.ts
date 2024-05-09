@@ -11,6 +11,7 @@ export interface ITask{
     deadLine: string;
     prioridade: string
     usuario: string;
+    nome_usuario: string;
 }
 
 export const situacoes: string[] = ['ANDAMENTO', 'CONCLUIDA'];

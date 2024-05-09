@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { TaskCardComponent } from '../../shared/components/task-card/task-card.component';
 import { ITask, situacoes, prioridades } from '../../core/models/task.model';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SlidePanelComponent } from '../../shared/ui/slide-panel/slide-panel.component';
 import { TaskService } from '../../core/services/task.service';
 import { IUserValue } from '../../core/models/user.model';
 import { UserService } from '../../core/services/usuario.service';
@@ -10,7 +9,7 @@ import { UserService } from '../../core/services/usuario.service';
 @Component({
   selector: 'app-task',
   standalone: true,
-  imports: [TaskCardComponent, SlidePanelComponent, ReactiveFormsModule],
+  imports: [TaskCardComponent, ReactiveFormsModule],
   templateUrl: './task.component.html',
   styleUrl: './task.component.scss'
 })
@@ -38,6 +37,7 @@ export class TaskComponent implements OnInit {
     });
 
     this.filterForm = this.fb.group({
+      id: new FormControl(),
       titulo: new FormControl(),
       deadLine: new FormControl(),
       prioridade: new FormControl(),
@@ -47,6 +47,7 @@ export class TaskComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.filterForm.get('situacao')?.setValue('ANDAMENTO');
     this.getAllTasks();
     this.getAllUserValues();
   }
@@ -130,6 +131,7 @@ export class TaskComponent implements OnInit {
 
   onLoadFilterForm(item: ITask) {
     this.taskForm.patchValue({
+      id: item.id,
       titulo: item.titulo,
       deadLine: item.deadLine,
       prioridade: item.prioridade,

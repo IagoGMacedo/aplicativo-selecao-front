@@ -11,4 +11,6 @@ import { ITask, situacoes } from '../../../core/models/task.model';
 export class TaskCardComponent {
   @Input() status: string = situacoes[0];
   @Input() task!: ITask;
+  @Input() nome!: string;
+  @Input() id!: string;
 }
