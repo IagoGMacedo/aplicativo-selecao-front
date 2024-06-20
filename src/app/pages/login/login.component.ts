@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
+import { ILogin } from '../../core/models/auth.model';
 
 @Component({
   selector: 'app-login',
@@ -10,26 +11,41 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService : AuthService){
-    this.loginForm = this.fb.group({
-      login: new FormControl('',Validators.required),
-      senha: new FormControl('',Validators.required),
+  constructor(private formBuilderService: FormBuilder, private authService: AuthService) {
 
-    })
-    console.log("construiu");
   }
 
-  onSubmit(){
+  loginForm = this.formBuilderService.group({
+    login: ['', Validators.required],
+    senha: ['', Validators.required],
+
+  })
+
+  wrongCredentials : boolean = false;
+
+  onSubmit() {
     console.log("entrou no onSubmit()");
-    if(this.loginForm.valid){
-      this.authService.onLogin(this.loginForm.value).subscribe({
-        next: () => {},
+    if (this.loginForm.valid) {
+      this.authService.onLogin(this.loginForm.value as ILogin).subscribe({
+        next: () => { },
+        error: () => {
+          this.wrongCredentials = true;
+        }
 
       })
-    } else{
+    } else {
       this.loginForm.markAllAsTouched();
     }
   }
+
+  get invalidLogin() {
+    return this.loginForm.controls.login.invalid && this.loginForm.controls.login.touched;
+  }
+
+  get invalidPassword() {
+    return this.loginForm.controls.senha.invalid && this.loginForm.controls.senha.touched;
+  }
+
+  
 }

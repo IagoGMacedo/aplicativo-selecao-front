@@ -6,19 +6,31 @@
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
-                <span class="navbar-toggler-icon">
-                </span>
+                <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navmenu">
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav me-auto"> <!-- Changed 'mr-auto' to 'me-auto' -->
                     <li class="nav-item">
                         <a href="#learn" class="nav-link active">Quadro de tarefas</a>
                     </li>
                 </ul>
-                <span>
-                    <a class="navbar-text" (click)="onLogout()">Sair</a>
-                </span>
+
+                <ul class="navbar-nav ms-auto"> <!-- Added 'ms-auto' -->
+                    <li class="nav-item dropdown">
+                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            Olá {{loggedUser.firstName}}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li>
+                                <a class="dropdown-item" (click)="onLogout()">Configurações <i class="bi bi-gear-fill"></i></a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" (click)="onLogout()">Sair <i class="bi bi-door-open-fill"></i></a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
